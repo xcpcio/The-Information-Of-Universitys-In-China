@@ -1,0 +1,5 @@
+{
+    "raw_path": "../raw/全国高等学校名单-2020-06-30年版.xls",
+    "logo_base_path": "../logo",
+    "dist": "../school_info.json"
+}

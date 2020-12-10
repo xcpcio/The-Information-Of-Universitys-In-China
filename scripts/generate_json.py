@@ -44,6 +44,8 @@ def gao():
             school['备注'] = rowValue[6]
             if rowValue[1] in logos.keys():
                 school['logoUrl'] = os.path.join(logo_base_path, logos[rowValue[1]])
+            else:
+                school['logoUrl'] = default_logo
             school_info.append(school)
     output(dist, school_info)
 
@@ -60,6 +62,7 @@ try:
     raw_path = config['raw_path']
     logo_base_path = config['logo_base_path']
     dist = config['dist']
+    default_logo = config['default_logo']
     gao()
 except Exception as e:
     print(e)

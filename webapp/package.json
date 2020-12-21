@@ -22,16 +22,17 @@
   },
   "dependencies": {
     "@ant-design/pro-layout": "^6.5.0",
-    "@umijs/preset-react": "1.x",
-    "umi": "^3.3.3",
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.9.0",
+    "@umijs/plugin-analytics": "^0.2.2",
+    "@umijs/preset-react": "1.x",
     "@umijs/test": "^3.3.3",
     "lint-staged": "^10.0.7",
     "prettier": "^2.2.0",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "typescript": "^4.1.2",
+    "umi": "^3.3.3",
     "yorkie": "^2.0.0"
   }
 }

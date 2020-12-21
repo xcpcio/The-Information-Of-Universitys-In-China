@@ -40,7 +40,7 @@ def gao():
             school['办学层次'] = rowValue[5]
             school['备注'] = rowValue[6]
             if rowValue[1] in logos.keys():
-                school['logoUrl'] = os.path.join(logo_src_path, logos[rowValue[1]])
+                school['logoUrl'] = os.path.join(logo_base_path, logos[rowValue[1]])
             else:
                 school['logoUrl'] = default_logo
             school_info.append(school)

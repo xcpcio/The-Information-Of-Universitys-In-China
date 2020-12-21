@@ -6,10 +6,6 @@ from shutil import copyfile
 import xlrd
 import math
 
-ignore = [
-    '.DS_Store'
-]
-
 def json_output(data):
     return json.dumps(data, sort_keys=True, indent=4, separators=(',', ':'), ensure_ascii=False)
 
@@ -23,9 +19,10 @@ def gao():
     data = xlrd.open_workbook(raw_path)
     table = data.sheet_by_index(0)
     logos = {}
-    for filename in os.listdir(logo_base_path):
-        school_name = filename.split('.')[0]
-        logos[school_name] = filename
+    for filename in os.listdir(logo_src_path):
+        if filename.split('.')[-1] in ['png', 'jpg', 'jpeg']:
+            school_name = filename.split('.')[0]
+            logos[school_name] = filename
     province = ''
     for rowNum in range(table.nrows):
         rowValue = table.row_values(rowNum)
@@ -43,7 +40,7 @@ def gao():
             school['办学层次'] = rowValue[5]
             school['备注'] = rowValue[6]
             if rowValue[1] in logos.keys():
-                school['logoUrl'] = os.path.join(logo_base_path, logos[rowValue[1]])
+                school['logoUrl'] = os.path.join(logo_src_path, logos[rowValue[1]])
             else:
                 school['logoUrl'] = default_logo
             school_info.append(school)
@@ -60,6 +57,7 @@ except json.JSONDecodeError as e:
 
 try:
     raw_path = config['raw_path']
+    logo_src_path = config['logo_src_path']
     logo_base_path = config['logo_base_path']
     dist = config['dist']
     default_logo = config['default_logo']

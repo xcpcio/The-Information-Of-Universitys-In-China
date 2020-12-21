@@ -1,1 +1,1 @@
-# The-Information-Of-Schools-In-China
+# The-Information-Of-Universitys-In-China

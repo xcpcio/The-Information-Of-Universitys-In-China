@@ -36,6 +36,7 @@ jobs:
       - name: Build Data
         run: |
           cd ./data/scripts
+          pip3 install -U -r requirements.txt
           python3 compress.py
           sed -i "s|\"logo_base_path\": \"../logo\"|\"logo_base_path\": \"//cdn.jsdelivr.net/gh/XCPCIO/XCPCIO-board@${{ env.VERSION_ID }}/logo/\"|" generate_json_config.json
           python3 generate_json.py

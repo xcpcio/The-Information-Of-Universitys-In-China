@@ -1,1 +1,56 @@
+name: Build and Deploy
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
 
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.3.1 # If you're using actions/checkout@v2 you must set persist-credentials to false in most cases for the deployment to work correctly.
+        with:
+          persist-credentials: false
+
+      - name: Set up Node.js 12.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+          registry-url: https://registry.npmjs.org/
+
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.8
+          architecture: 'x64' # (x64 or x86)
+      
+      - name: Get Version ID
+        id: get-version-id
+        run: |
+          VERSION_ID=$(cat ./webapp/package.json | grep version | sed 's|  \"version\": \"||g' | sed 's|\",||g')
+          echo "::set-output name=version-id::$(echo $VERSION_ID)"
+          echo $VERSION_ID
+
+      - name: Build Data
+        run: |
+          cd ./data/scripts
+          python3 compress.py
+          sed -i "s|\"logo_base_path\": \"../logo\"|\"logo_base_path\": \"//cdn.jsdelivr.net/gh/XCPCIO/XCPCIO-board@${{ env.VERSION_ID }}/logo/\"|" generate_json_config.json
+          python3 generate_json.py
+          cd ../../
+          mkdir site
+          cp ./data/_logo/* ./site/logo
+          cp ./data/university_info.json ./site/university_info.json
+      
+      - name: Release
+        uses: JamesIves/github-pages-deploy-action@3.6.2
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: gh-pages # The branch the action should deploy to.
+          FOLDER: site # The folder the action should deploy.
+          CLEAN: true # Automatically remove deleted files from the deploy branch
+          
+
+          

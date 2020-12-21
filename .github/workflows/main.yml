@@ -42,7 +42,8 @@ jobs:
           python3 generate_json.py
           cd ../../
           mkdir site
-          cp ./data/_logo/* ./site/logo
+          mkdir site/logo
+          cp ./data/_logo/* ./site/logo/
           cp ./data/university_info.json ./site/university_info.json
       
       - name: Release

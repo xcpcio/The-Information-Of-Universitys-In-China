@@ -32,17 +32,24 @@ def gao():
             pass
         else:
             school = {}
-            school['学校名称'] = rowValue[1]
-            school['省份'] = province
-            school['学校标识码'] = math.floor(rowValue[2])
-            school['主管部门'] = rowValue[3]
-            school['所在地'] = rowValue[4]
-            school['办学层次'] = rowValue[5]
-            school['备注'] = rowValue[6]
+            # 学校名称
+            school['name'] = rowValue[1]
+            # 省份
+            school['province'] = province
+            # 学校标识码
+            school['id'] = math.floor(rowValue[2])
+            # 主管部门
+            school['competentDepartment'] = rowValue[3]
+            # 所在地
+            school['city'] = rowValue[4]
+            # 办学层次
+            school['level'] = rowValue[5]
+            # 备注
+            school['remarks'] = rowValue[6]
             if rowValue[1] in logos.keys():
                 school['logoUrl'] = os.path.join(logo_base_path, logos[rowValue[1]])
             else:
-                school['logoUrl'] = default_logo
+                school['logoUrl'] = os.path.join(logo_base_path, default_logo)
             school_info.append(school)
     output(dist, school_info)
 

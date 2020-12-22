@@ -1,14 +1,13 @@
 import { defineConfig } from 'umi';
+import { CONFIG } from './config';
 
 export default defineConfig({
-    analytics: {
-        ga: '',
-        baidu: '',
-    },
+    analytics: CONFIG.analytics,
     hash: true,
     nodeModulesTransform: {
         type: 'none',
     },
+    title: CONFIG.title,
     routes: [
         {
             path: '/',
@@ -16,4 +15,11 @@ export default defineConfig({
             exact: true,
         },
     ],
+    proxy: {
+        '/data': {
+            target: 'http://127.0.0.1:8080/',
+            changeOrigin: true,
+        },
+    },
+    publicPath: CONFIG.publicPath,
 });

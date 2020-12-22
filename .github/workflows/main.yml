@@ -42,9 +42,22 @@ jobs:
           python3 generate_json.py
           cd ../../
           mkdir site
-          mkdir site/logo
-          cp ./data/_logo/* ./site/logo/
-          cp ./data/university_info.json ./site/university_info.json
+          mkdir site/data
+          mkdir site/data/logo
+          cp ./data/_logo/* ./site/data/logo/
+          cp ./data/university_info.json ./site/data/university_info.json
+
+      - name: Build WebApp
+        env:
+          VERSION_ID: ${{ steps.get-version-id.outputs.version-id }}
+        run: |
+          sed -i "s|publicPath: '/'|publicPath: '//cdn.jsdelivr.net/gh/XCPCIO/The-Information-Of-Universitys-In-China@${{ env.VERSION_ID }}/'|" config.ts
+          sed -i "s|baidu: ''|baidu: '${{ secrets.BAIDU_ANALYTICS_ID }}'|" config.ts 
+          cat config.ts
+          npm install
+          npm run build
+          cp dist/* site/
+          cp dist/index.html site/404.html
       
       - name: Release
         uses: JamesIves/github-pages-deploy-action@3.6.2
@@ -53,6 +66,19 @@ jobs:
           BRANCH: gh-pages # The branch the action should deploy to.
           FOLDER: site # The folder the action should deploy.
           CLEAN: true # Automatically remove deleted files from the deploy branch
+
+      - name: Create Release # 创建Release，可以在仓库看到一个个版本
+        id: create_release
+        uses: actions/create-release@main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+          VERSION_ID: ${{ steps.get-version-id.outputs.version-id }}
+        with:
+          commitish: gh-pages
+          tag_name: ${{ env.VERSION_ID }}
+          release_name: Release ${{ env.VERSION_ID }}
+          draft: false # 是否是草稿
+          prerelease: false # 是否是预发布
           
 
           
